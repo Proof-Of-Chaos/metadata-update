@@ -4,6 +4,16 @@ const fs = require('fs');
 
 const { ApiPromise, WsProvider } = require("@polkadot/api");
 
+// IPFS CIDs are in the following order
+// Common direct
+// Epic direct
+// Common direct 95%
+// Rare direct
+// Common delegated 95%
+// Epic delegated
+// Common delegated
+// Rare delegated
+
 const ipfsLinkMappings = {
   'ipfs://ipfs/bafkreicisbw7khk2gbmpk42kp6jedzeen7hinvmooxf4axo3tw4xuh3dim': 'ipfs://ipfs/QmazTCAz6FBKjDhAP3n6FBqpc1UCBjBGdqpXi5DNCETKH3',
   'ipfs://ipfs/bafkreig7uaaosolevcbixzwhd3y4qd4vg34prntzzejkjd4li27c62uypy': 'ipfs://ipfs/QmPuWqbqEyyCNc8LN5ZHrFrfk4Zww9Md9k1FDwmvCYefie',
