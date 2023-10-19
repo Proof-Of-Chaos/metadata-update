@@ -14,7 +14,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (g && (g = 0, op[0] && (_ = 0)), _) try {
+        while (_) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -35,30 +35,37 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 var calls1_1 = require("./calls1");
+var fs = require('fs');
 var _a = require("@polkadot/api"), ApiPromise = _a.ApiPromise, WsProvider = _a.WsProvider;
-// const wsProvider = new WsProvider("wss://kusama-asset-hub-rpc.polkadot.io");
-// const api = await ApiPromise.create({ provider: wsProvider });
-// const extrinsic = api.tx[callModule][callMethod](...Object.values(args));
-// const extrinsicHex = extrinsic.toHex();
-// console.log(extrinsicHex);
-function toCamelCase(str) {
-    return str
-        .split("_")
-        .map(function (word, index) {
-        // For the first word, keep it as is but ensure it's in lowercase
-        if (index === 0) {
-            return word.toLowerCase();
+var ipfsLinkMappings = {
+    'ipfs://ipfs/bafkreicisbw7khk2gbmpk42kp6jedzeen7hinvmooxf4axo3tw4xuh3dim': 'QmazTCAz6FBKjDhAP3n6FBqpc1UCBjBGdqpXi5DNCETKH3',
+    'ipfs://ipfs/bafkreig7uaaosolevcbixzwhd3y4qd4vg34prntzzejkjd4li27c62uypy': 'QmPuWqbqEyyCNc8LN5ZHrFrfk4Zww9Md9k1FDwmvCYefie',
+    'ipfs://ipfs/bafkreiebalpllsy7zqrabmnnricuwoiifjzcnhzx3zlk7gcrahzwlflvfa': 'balsdkjfalskdjflskdf',
+    'ipfs://ipfs/bafkreidedzwdpu3wjbzn67nyv6gtzadlehy3deloqfizl3hxbrqqwbaetm': 'QmVHreEGgUjSs8F264Jo87RSwyaj7MwdH6eacyrkxGXhML',
+    'ipfs://ipfs/bafkreidpi55n4lhjsn45eg6jopsiwptenyqarl7pyfg2xa52erpt4qhvwe': 'balsdkjfalskdjflskdf',
+    'ipfs://ipfs/bafkreiguuvdtqkgnuiz54shpccrtitcdh726u4kl6ksaichetnisdsifci': 'QmPuWqbqEyyCNc8LN5ZHrFrfk4Zww9Md9k1FDwmvCYefie',
+    'ipfs://ipfs/bafkreidkvi7k5njyw5lfv5xlbye5jjyqpf7vkpd3ggoyk4oa4vbc74c64i': 'QmazTCAz6FBKjDhAP3n6FBqpc1UCBjBGdqpXi5DNCETKH3',
+    'ipfs://ipfs/bafkreifzmohj6vjyy52rnsrkxw4t3djpbal3n5bmg7r22n4ovl5e3z3v5i': 'QmVHreEGgUjSs8F264Jo87RSwyaj7MwdH6eacyrkxGXhML'
+};
+// Recursive function to collect unique IPFS links
+function collectUniqueIPFSLinks(data, ipfsLinks) {
+    if (Array.isArray(data)) {
+        data.forEach(function (item) { return collectUniqueIPFSLinks(item, ipfsLinks); });
+    }
+    else if (typeof data === 'object' && data !== null) {
+        for (var key in data) {
+            collectUniqueIPFSLinks(data[key], ipfsLinks);
         }
-        // For subsequent words, capitalize the first letter
-        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-    })
-        .join("");
+    }
+    else if (typeof data === 'string' && data.startsWith('ipfs://')) {
+        ipfsLinks.add(data); // Add the IPFS link to the Set
+    }
 }
 function encodeJSON() {
     return __awaiter(this, void 0, void 0, function () {
-        var wsProvider, api;
+        var wsProvider, api, setMetadataCalls, calls, finalCall, encodedCall, filePath;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -69,32 +76,56 @@ function encodeJSON() {
                     return [4 /*yield*/, api.isReady];
                 case 2:
                     _a.sent();
-                    calls1_1.calls1.map(function (_a) {
-                        //   const { call_index } = value;
-                        //   console.log(value);
-                        var value = _a.value;
-                        value.map(function (_a) {
-                            var _b;
-                            var call_index = _a.call_index, call_module = _a.call_module, call_name = _a.call_name, params = _a.params;
-                            console.log(call_module, call_name, params);
-                            var formattedArgs = params.map(function (arg) { return arg.value; });
-                            //   console.log(Object.keys(api.tx));
-                            //   console.log(Object.keys(api.tx[toCamelCase(call_module)]));
-                            //   console.log(
-                            //     Object.keys(api.tx[toCamelCase(call_module)][toCamelCase(call_name)])
-                            //   );
-                            //   console.log(formattedArgs);
-                            var extrinsic = (_b = api.tx[toCamelCase(call_module)])[toCamelCase(call_name)].apply(_b, formattedArgs);
-                            var extrinsicHex = extrinsic.toHex();
-                            console.log(extrinsicHex);
-                            //   const extrinsic = api.tx.nfts?.[call_name.toLowerCase()](params);
-                            //   const extrinsicHex = extrinsic.toHex();
-                            //   console.log(extrinsicHex);
-                        });
+                    setMetadataCalls = calls1_1.calls1[0].value.filter(function (call) { return call.call_name === "set_metadata"; });
+                    calls = [];
+                    setMetadataCalls.forEach(function (call) {
+                        var params = call.params;
+                        var collectionValue;
+                        var itemValue;
+                        var newMetadata;
+                        var oldMetadata;
+                        // Extract collection and item values
+                        if (params) {
+                            params.forEach(function (param) {
+                                if (param.name === 'data' && ipfsLinkMappings[param.value]) {
+                                    oldMetadata = param.value;
+                                    newMetadata = ipfsLinkMappings[param.value];
+                                }
+                                else if (param.name === 'collection') {
+                                    collectionValue = param.value;
+                                }
+                                else if (param.name === 'item') {
+                                    itemValue = param.value;
+                                }
+                            });
+                            // console.log("Collection Value:", collectionValue);
+                            // console.log("Item Value:", itemValue);
+                            // console.log("Old metadata:", oldMetadata);
+                            // console.log("New metadata:", newMetadata);
+                        }
+                        else {
+                            console.log("params is undefined");
+                        }
+                        var newCall = api.tx.nfts.setMetadata(collectionValue, itemValue, newMetadata);
+                        calls.push(newCall);
                     });
+                    console.log("No of txs", calls.length);
+                    finalCall = api.tx.utility.batchAll(calls);
+                    encodedCall = finalCall.toHex();
+                    filePath = './output.txt';
+                    // Write the encodedCall to the file
+                    fs.writeFileSync(filePath, encodedCall, 'utf-8');
+                    console.log("Encoded call has been written to ".concat(filePath));
                     return [2 /*return*/];
             }
         });
     });
 }
+// uncomment below to get all unique ipfs links in calls1
+// // Create a Set to store unique IPFS links
+// const uniqueIPFSLinks = new Set();
+// // Use the function to collect unique IPFS links from calls1
+// collectUniqueIPFSLinks(calls1, uniqueIPFSLinks);
+// // Convert the Set to an array (if needed)
+// console.log(uniqueIPFSLinks);
 encodeJSON();
