@@ -49,15 +49,24 @@ var calls1_1 = require("./calls1");
 var calls2_1 = require("./calls2");
 var fs = require('fs');
 var _a = require("@polkadot/api"), ApiPromise = _a.ApiPromise, WsProvider = _a.WsProvider;
+// IPFS CIDs are in the following order
+// Common direct
+// Common direct 95%
+// Common delegated 95%
+// Common delegated
+// Rare direct
+// Rare delegated
+// Epic direct
+// Epic delegated
 var ipfsLinkMappings = {
     'ipfs://ipfs/bafkreicisbw7khk2gbmpk42kp6jedzeen7hinvmooxf4axo3tw4xuh3dim': 'ipfs://ipfs/QmazTCAz6FBKjDhAP3n6FBqpc1UCBjBGdqpXi5DNCETKH3',
-    'ipfs://ipfs/bafkreig7uaaosolevcbixzwhd3y4qd4vg34prntzzejkjd4li27c62uypy': 'ipfs://ipfs/QmPuWqbqEyyCNc8LN5ZHrFrfk4Zww9Md9k1FDwmvCYefie',
     'ipfs://ipfs/bafkreiebalpllsy7zqrabmnnricuwoiifjzcnhzx3zlk7gcrahzwlflvfa': 'ipfs://ipfs/QmazTCAz6FBKjDhAP3n6FBqpc1UCBjBGdqpXi5DNCETKH3',
-    'ipfs://ipfs/bafkreidedzwdpu3wjbzn67nyv6gtzadlehy3deloqfizl3hxbrqqwbaetm': 'ipfs://ipfs/QmVHreEGgUjSs8F264Jo87RSwyaj7MwdH6eacyrkxGXhML',
     'ipfs://ipfs/bafkreidpi55n4lhjsn45eg6jopsiwptenyqarl7pyfg2xa52erpt4qhvwe': 'ipfs://ipfs/QmazTCAz6FBKjDhAP3n6FBqpc1UCBjBGdqpXi5DNCETKH3',
-    'ipfs://ipfs/bafkreiguuvdtqkgnuiz54shpccrtitcdh726u4kl6ksaichetnisdsifci': 'ipfs://ipfs/QmPuWqbqEyyCNc8LN5ZHrFrfk4Zww9Md9k1FDwmvCYefie',
     'ipfs://ipfs/bafkreidkvi7k5njyw5lfv5xlbye5jjyqpf7vkpd3ggoyk4oa4vbc74c64i': 'ipfs://ipfs/QmazTCAz6FBKjDhAP3n6FBqpc1UCBjBGdqpXi5DNCETKH3',
-    'ipfs://ipfs/bafkreifzmohj6vjyy52rnsrkxw4t3djpbal3n5bmg7r22n4ovl5e3z3v5i': 'ipfs://ipfs/QmVHreEGgUjSs8F264Jo87RSwyaj7MwdH6eacyrkxGXhML'
+    'ipfs://ipfs/bafkreidedzwdpu3wjbzn67nyv6gtzadlehy3deloqfizl3hxbrqqwbaetm': 'ipfs://ipfs/QmVHreEGgUjSs8F264Jo87RSwyaj7MwdH6eacyrkxGXhML',
+    'ipfs://ipfs/bafkreifzmohj6vjyy52rnsrkxw4t3djpbal3n5bmg7r22n4ovl5e3z3v5i': 'ipfs://ipfs/QmVHreEGgUjSs8F264Jo87RSwyaj7MwdH6eacyrkxGXhML',
+    'ipfs://ipfs/bafkreig7uaaosolevcbixzwhd3y4qd4vg34prntzzejkjd4li27c62uypy': 'ipfs://ipfs/QmPuWqbqEyyCNc8LN5ZHrFrfk4Zww9Md9k1FDwmvCYefie',
+    'ipfs://ipfs/bafkreiguuvdtqkgnuiz54shpccrtitcdh726u4kl6ksaichetnisdsifci': 'ipfs://ipfs/QmPuWqbqEyyCNc8LN5ZHrFrfk4Zww9Md9k1FDwmvCYefie'
 };
 // Recursive function to collect unique IPFS links
 function collectUniqueIPFSLinks(data, ipfsLinks) {
